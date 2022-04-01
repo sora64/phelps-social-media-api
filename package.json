@@ -1,0 +1,25 @@
+{
+  "name": "phelps-social-media-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sora64/phelps-social-media-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sora64/phelps-social-media-api/issues"
+  },
+  "homepage": "https://github.com/sora64/phelps-social-media-api#readme",
+  "dependencies": {
+    "express-session": "^1.17.2",
+    "mongoose": "^6.2.9"
+  }
+}
