@@ -65,10 +65,7 @@ const userController = {
         }
         console.log(dbUserData.username);
         res.json(dbUserData);
-        return Thought.deleteMany(
-          { username: dbUserData.username },
-          { new: true }
-        );
+        return Thought.deleteMany({ username: dbUserData.username });
       })
       .catch((err) => res.status(400).json(err));
   },
