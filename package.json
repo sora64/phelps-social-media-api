@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/sora64/phelps-social-media-api#readme",
   "dependencies": {
+    "express": "^4.17.3",
     "express-session": "^1.17.2",
     "mongoose": "^6.2.9"
   }
