@@ -1,4 +1,4 @@
-const { Schema, model, Types } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const UserSchema = new Schema(
   {
@@ -22,7 +22,7 @@ const UserSchema = new Schema(
     ],
     friends: [
       {
-        type: Schema.Types.ObjectId,
+        type: Array,
         ref: "User",
       },
     ],

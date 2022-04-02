@@ -9,16 +9,16 @@ const {
   removeFriend,
 } = require("../../controllers/user-controller");
 
-router.route("/users").get(getUsers).post(addUser);
+router.route("/").get(getUsers).post(addUser);
 
 router
-  .route("/users/:userId/:")
+  .route("/:userId/")
   .get(getUserById)
   .put(updateUser)
   .delete(removeUser);
 
 router
-  .route("users/:userId/friends/:friendId")
+  .route("/:userId/friends/:friendId")
   .post(addFriend)
   .delete(removeFriend);
 

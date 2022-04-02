@@ -1,6 +1,7 @@
 // I'm following naming conventions for this file, but I just have to point out the hilarity of calling a file "thought-controller.js".
 
 const { Thought, User } = require("../models");
+const { db } = require("../models/User");
 
 const thoughtController = {
   // get all thoughts
@@ -9,15 +10,12 @@ const thoughtController = {
       .select("-__v")
       .sort({ _id: -1 })
       .then((dbThoughtData) => res.json(dbThoughtData))
-      .catch((err) => {
-        console.log(err);
-        res.status(400).json(err);
-      });
+      .catch((err) => res.status(400).json(err));
   },
 
   // get one thought by id
   getThoughtById({ params }, res) {
-    User.findOne({ _id: params.id })
+    Thought.findOne({ _id: params.thoughtId })
       .select("-__v")
       .then((dbThoughtData) => {
         if (!dbThoughtData) {
@@ -26,19 +24,15 @@ const thoughtController = {
         }
         res.json(dbThoughtData);
       })
-      .catch((err) => {
-        console.log(err);
-        res.status(400).json(err);
-      });
+      .catch((err) => res.status(400).json(err));
   },
 
   // add a thought
-  addThought({ params, body }, res) {
-    console.log(body);
+  addThought({ body }, res) {
     Thought.create(body)
       .then(({ _id }) => {
         return User.findOneAndUpdate(
-          { _id: params.userId },
+          { _id: body.userId },
           { $push: { thoughts: _id } },
           { new: true }
         );
@@ -55,8 +49,7 @@ const thoughtController = {
 
   // update thought by id
   updateThought({ params, body }, res) {
-    console.log(body);
-    Thought.findOneAndUpdate({ _id: params.id }, body, {
+    Thought.findOneAndUpdate({ _id: params.thoughtId }, body, {
       new: true,
       runValidators: true,
     })
@@ -66,43 +59,21 @@ const thoughtController = {
             .status(404)
             .json({ message: "No thought found with this id!" });
         }
-        return User.findOneAndUpdate(
-          { _id: params.userId },
-          { $pull: { thoughts: params.thoughtId } },
-          { new: true }
-        );
-      })
-      .then((dbUserData) => {
-        if (!dbUserData) {
-          res.status(404).json({ message: "No user found with this id!" });
-          return;
-        }
-        res.json(dbUserData);
+        res.json(dbThoughtData);
       })
       .catch((err) => res.status(400).json(err));
   },
 
   // remove thought by id
   removeThought({ params }, res) {
-    Thought.findOneAndDelete({ _id: params.id })
+    Thought.findOneAndDelete({ _id: params.thoughtId })
       .then((dbThoughtData) => {
         if (!dbThoughtData) {
           return res
             .status(404)
             .json({ message: "No thought found with this id!" });
         }
-        return User.findOneAndUpdate(
-          { _id: params.userId },
-          { $pull: { thoughts: params.thoughtId } },
-          { new: true }
-        );
-      })
-      .then((dbUserData) => {
-        if (!dbUserData) {
-          res.status(404).json({ message: "No user found with this id!" });
-          return;
-        }
-        res.json(dbUserData);
+        res.json(dbThoughtData);
       })
       .catch((err) => res.status(400).json(err));
   },
@@ -110,7 +81,7 @@ const thoughtController = {
   // add a reaction
   addReaction({ params, body }, res) {
     Thought.findOneAndUpdate(
-      { _id: params.commentId },
+      { _id: params.thoughtId },
       { $push: { reactions: body } },
       { new: true, runValidators: true }
     )
@@ -127,7 +98,7 @@ const thoughtController = {
   // remove reaction by id
   removeReaction({ params }, res) {
     Thought.findOneAndUpdate(
-      { _id: params.commentId },
+      { _id: params.thoughtId },
       { $pull: { reactions: { reactionId: params.reactionId } } },
       { new: true }
     )
