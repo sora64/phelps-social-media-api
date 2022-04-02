@@ -9,6 +9,7 @@ This project sets up a backend API for a social media platform, allowing one to 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Demo](#demo)
+- [Screenshot](#screenshot)
 - [Contributing](#contributing)
 - [Questions](#questions)
 
